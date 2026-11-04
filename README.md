@@ -268,7 +268,8 @@ names, native validation focus, FormData, reset, fieldset disabling, keyboard
 operation, Shadow DOM styling, late property upgrade, and hydration.
 
 Target modern evergreen browsers with Custom Elements, Shadow DOM, and
-form-associated custom element support (Chromium 77+, Firefox 93+, Safari 16.4+).
+form-associated custom element support. Distributed JavaScript follows Vite's
+default build target; API availability alone does not guarantee compatibility.
 Automated testing covers the installed Playwright engine versions, not every older
 release or actual Safari device. No legacy-browser polyfills are bundled.
 Unsupported browsers should receive native HTML controls from the consuming app.
