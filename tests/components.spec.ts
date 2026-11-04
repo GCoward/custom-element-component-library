@@ -48,6 +48,36 @@ test("disabled fieldsets disable the shadow input and exclude the form value", a
   await expect(field).toHaveValue("Grace");
 });
 
+test("tab order skips disabled controls and reaches the actual shadow input", async ({ page }) => {
+  await page.getByRole("button", { name: "Count a click" }).focus();
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("textbox", { name: "Your name" })).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("button", { name: "Submit form" })).toBeFocused();
+});
+
+test("dirty/default values, native change events and resets remain distinct", async ({ page }) => {
+  const field = page.locator("ce-text-field");
+  await field.evaluate((element) => {
+    element.setAttribute("value", "default");
+    element.addEventListener("change", () => {
+      element.dataset.changes = String(Number(element.dataset.changes ?? 0) + 1);
+    });
+  });
+  const input = page.getByRole("textbox", { name: "Your name" });
+  await expect(input).toHaveValue("default");
+  await input.fill("edited");
+  await input.press("Tab");
+  await expect(field).toHaveAttribute("data-changes", "1");
+  await field.evaluate((element) => { element.setAttribute("value", "new default"); });
+  await expect(input).toHaveValue("edited");
+  await page.getByRole("button", { name: "Reset form" }).click();
+  await expect(input).toHaveValue("new default");
+  await expect(field).toHaveAttribute("data-changes", "1");
+  expect(await page.locator("form").evaluate((form: HTMLFormElement) =>
+    new FormData(form).get("name"))).toBe("new default");
+});
+
 test("disclosure uses native keyboard interaction and reflects open state", async ({ page }) => {
   const summary = page.locator("ce-disclosure summary");
   const content = page.getByText("Custom elements work in plain HTML and across frameworks without a runtime dependency.");

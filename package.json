@@ -18,8 +18,9 @@
     }
   },
   "scripts": {
+    "predev": "npm run build",
     "dev": "npm run dev --workspace demo",
-    "build": "tsc -p tsconfig.build.json && vite build",
+    "build": "vite build && tsc -p tsconfig.build.json",
     "build:demo": "npm run build && npm run build --workspace demo",
     "lint": "tsc --noEmit && npm run lint --workspace demo",
     "test": "vitest run",
