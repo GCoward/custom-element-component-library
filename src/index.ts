@@ -1,6 +1,6 @@
-import type { CeButton } from "./button";
-import type { CeDisclosure } from "./disclosure";
-import type { CeTextField } from "./text-field";
+import type { CeButton } from "./button.js";
+import type { CeDisclosure } from "./disclosure.js";
+import type { CeTextField } from "./text-field.js";
 
 export type { CeButton, CeDisclosure, CeTextField };
 
