@@ -16,7 +16,7 @@ h2 { font-size: 1.25rem; margin-top: 0; }
 p { line-height: 1.7; }
 .eyebrow { font-size: .75rem; font-weight: 700; letter-spacing: .12em; }
 .intro { max-width: 42rem; font-size: 1.15rem; }
-.examples { display: grid; gap: 1.5rem; }
+.examples { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
 section { background: white; border: 1px solid #d5deeb; border-radius: 1rem; padding: 1.5rem; }
 .row { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1rem; }
 fieldset { margin: 0; border: 1px solid #94a3b8; border-radius: .5rem; padding: 1rem; }
