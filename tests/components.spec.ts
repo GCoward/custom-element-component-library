@@ -20,10 +20,16 @@ test("native action button supports keyboard, disabled state and React events", 
 test("text field has an accessible name, required validity, form value and reset", async ({ page }) => {
   const field = page.getByRole("textbox", { name: "Your name", exact: true });
   await expect(field).toHaveAttribute("required", "");
+  await expect(field).toHaveAttribute("aria-invalid", "false");
   await page.getByRole("button", { name: "Submit form" }).click();
   await expect(page.getByText("No submission yet.", { exact: true })).toBeVisible();
+  await expect(field).toHaveAttribute("aria-invalid", "true");
   expect(await page.locator("form").evaluate((form: HTMLFormElement) => form.checkValidity())).toBe(false);
   await expect(field).toBeFocused();
+  await field.fill("Ada Lovelace");
+  await expect(field).toHaveAttribute("aria-invalid", "false");
+  await field.fill("");
+  await expect(field).toHaveAttribute("aria-invalid", "true");
   await field.fill("Ada Lovelace");
   await expect(page.locator("output")).toHaveText("Ada Lovelace");
   expect(await page.locator("form").evaluate((form: HTMLFormElement) =>
@@ -32,6 +38,7 @@ test("text field has an accessible name, required validity, form value and reset
   await expect(page.getByText("Submitted: Ada Lovelace", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Reset form" }).click();
   await expect(field).toHaveValue("");
+  await expect(field).toHaveAttribute("aria-invalid", "false");
   expect(await page.locator("form").evaluate((form: HTMLFormElement) => form.checkValidity())).toBe(false);
 });
 

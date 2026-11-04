@@ -7,6 +7,7 @@ export class CeTextField extends HTMLElement {
   #input: HTMLInputElement;
   #label: HTMLLabelElement;
   #dirty = false;
+  #showValidation = false;
   #formDisabled = false;
 
   constructor() {
@@ -37,6 +38,10 @@ export class CeTextField extends HTMLElement {
       event.stopPropagation();
       this.dispatchEvent(new Event("change", { bubbles: true, composed: true }));
     });
+    this.addEventListener("invalid", () => {
+      this.#showValidation = true;
+      this.#syncForm();
+    });
   }
 
   connectedCallback() {
@@ -66,7 +71,7 @@ export class CeTextField extends HTMLElement {
       missing ? this.#input.validationMessage : "",
       this.#input,
     );
-    this.#input.setAttribute("aria-invalid", String(missing));
+    this.#input.setAttribute("aria-invalid", String(missing && this.#showValidation));
   }
 
   get value() { return this.#input.value; }
@@ -94,6 +99,7 @@ export class CeTextField extends HTMLElement {
 
   formResetCallback() {
     this.#dirty = false;
+    this.#showValidation = false;
     this.#input.value = this.getAttribute("value") ?? "";
     this.#syncForm();
   }

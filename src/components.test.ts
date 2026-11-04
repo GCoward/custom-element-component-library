@@ -108,6 +108,18 @@ describe("ce-text-field", () => {
     expect(input.disabled).toBe(false);
   });
 
+  it("shows required errors after interaction or failed validation and clears them on reset", () => {
+    const element = document.createElement("ce-text-field");
+    element.required = true;
+    document.body.append(element);
+    const input = element.shadowRoot!.querySelector("input")!;
+    expect(input.getAttribute("aria-invalid")).toBe("false");
+    element.dispatchEvent(new Event("invalid"));
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    element.formResetCallback();
+    expect(input.getAttribute("aria-invalid")).toBe("false");
+  });
+
   it("distinguishes the default value from a dirty value and resets", () => {
     const element = document.createElement("ce-text-field");
     element.setAttribute("value", "initial");
